@@ -1,13 +1,15 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <RootNamespace>Integral</RootNamespace>  
+    <RootNamespace>Integral</RootNamespace>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageProjectUrl>https://github.com/c-sharpie</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/c-sharpie/integral-library</RepositoryUrl>	
-    <Copyright>CSharpie LLC</Copyright>
+    <RepositoryUrl>https://github.com/c-sharpie/integral-network</RepositoryUrl>
+	<PackageProjectUrl>https://github.com/c-sharpie</PackageProjectUrl>
+	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <NeutralLanguage>en</NeutralLanguage>
     <RepositoryType>git</RepositoryType>
+    <Copyright>CSharpie LLC</Copyright>
+	<Authors>CSharpie LLC</Authors>
     <LangVersion>8.0</LangVersion>
 	<Nullable>enable</Nullable>
     <Version>0.0.0</Version>

@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Integral" Version="0.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Integral.Network.Interface\Integral.Network.Interface.csproj" />
+  </ItemGroup>
+</Project>

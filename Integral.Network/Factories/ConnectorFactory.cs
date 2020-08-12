@@ -15,10 +15,10 @@ namespace Integral.Factories
             {
                 SslClientAuthenticationOptions sslClientAuthenticationOptions = new SslClientAuthenticationOptions();
                 sslClientAuthenticationOptions.TargetHost = DnsEndPoint.Host;
-                return new SecureConnector(sslClientAuthenticationOptions, Encoding, DnsEndPoint);
+                return new SecureSocketConnector(sslClientAuthenticationOptions, Encoding, DnsEndPoint);
             }
 
-            return new StreamConnector(Encoding, DnsEndPoint);
+            return new SocketConnector(Encoding, DnsEndPoint);
         }
     }
 }

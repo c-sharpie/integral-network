@@ -1,5 +1,4 @@
-﻿using System.Net.Sockets;
-using System.Text;
+﻿using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Integral.Abstractions;
@@ -10,20 +9,25 @@ using Integral.Writers;
 
 namespace Integral.Transporters
 {
-    internal sealed class SocketTransporter : SocketConnection, Transporter
+    internal sealed class SocketTransporter : Transporter
     {
+        private readonly Connection connection;
+
         private readonly ByteStream byteStream;
 
         private readonly PrimitiveReader primitiveReader;
 
         private readonly PrimitiveWriter primitiveWriter;
 
-        internal SocketTransporter(ByteStream byteStream, Encoding encoding, TcpClient tcpClient) : base(tcpClient)
+        internal SocketTransporter(Connection connection, ByteStream byteStream, Encoding encoding)
         {
+            this.connection = connection;
             this.byteStream = byteStream;
             primitiveReader = new ByteReader(byteStream, encoding);
             primitiveWriter = new ByteWriter(byteStream, encoding);
         }
+
+        public bool Enabled => connection.Enabled;
 
         public async ValueTask Read(Deserializable deserializable, CancellationToken cancellationToken)
         {
@@ -39,10 +43,10 @@ namespace Integral.Transporters
             await byteStream.FlushAsync(cancellationToken);
         }
 
-        public override void Dispose()
+        public void Dispose()
         {
             byteStream.Dispose();
-            base.Dispose();
+            connection.Dispose();
         }
     }
 }

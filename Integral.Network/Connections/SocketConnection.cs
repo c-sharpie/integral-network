@@ -3,13 +3,13 @@ using Integral.Diagnostics;
 
 namespace Integral.Connections
 {
-    internal abstract class SocketConnection : Connection
+    internal sealed class SocketConnection : Connection
     {
         private readonly TcpClient tcpClient;
 
         private readonly string address;
 
-        protected SocketConnection(TcpClient tcpClient)
+        internal SocketConnection(TcpClient tcpClient)
         {
             this.tcpClient = tcpClient;
 
@@ -23,7 +23,7 @@ namespace Integral.Connections
 
         public override string ToString() => address;
 
-        public virtual void Dispose()
+        public void Dispose()
         {
             tcpClient.Dispose();
 

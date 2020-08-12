@@ -15,10 +15,10 @@ namespace Integral.Factories
             {
                 SslServerAuthenticationOptions sslServerAuthenticationOptions = new SslServerAuthenticationOptions();
                 sslServerAuthenticationOptions.ServerCertificate = X509Certificate2;
-                return new SecureListener(sslServerAuthenticationOptions, Encoding, IpEndPoint);
+                return new SecureSocketListener(sslServerAuthenticationOptions, Encoding, IpEndPoint);
             }
 
-            return new StreamListener(Encoding, IpEndPoint);
+            return new SocketListener(Encoding, IpEndPoint);
         }
     }
 }

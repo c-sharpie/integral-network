@@ -4,22 +4,23 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Integral.Connections;
 using Integral.Decorators;
 using Integral.Streams;
 using Integral.Transporters;
 
 namespace Integral.Listeners
 {
-    internal class StreamListener : TcpListenerDecorator, Listener
+    internal class SocketListener : TcpListenerDecorator, Listener
     {
         private readonly Encoding encoding;
 
-        internal StreamListener(Encoding encoding, IPEndPoint ipEndPoint) : base(ipEndPoint) => this.encoding = encoding;
+        internal SocketListener(Encoding encoding, IPEndPoint ipEndPoint) : base(ipEndPoint) => this.encoding = encoding;
 
         public async Task<Transporter> Execute(CancellationToken cancellationToken)
         {
             TcpClient tcpClient = await Accept();
-            return new SocketTransporter(new BufferedByteStream(await Initialize(tcpClient, cancellationToken)), encoding, tcpClient);
+            return new SocketTransporter(new SocketConnection(tcpClient), new BufferedByteStream(await Initialize(tcpClient, cancellationToken)), encoding);
         }
 
         protected virtual Task<Stream> Initialize(TcpClient tcpClient, CancellationToken cancellationToken) => Task.FromResult((Stream)new NetworkStreamDecorator(tcpClient));

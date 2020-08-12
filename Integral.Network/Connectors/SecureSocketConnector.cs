@@ -9,11 +9,11 @@ using Integral.Decorators;
 
 namespace Integral.Connectors
 {
-    internal sealed class SecureConnector : StreamConnector
+    internal sealed class SecureSocketConnector : SocketConnector
     {
         private readonly SslClientAuthenticationOptions sslClientAuthenticationOptions;
 
-        internal SecureConnector(SslClientAuthenticationOptions sslClientAuthenticationOptions, Encoding encoding, DnsEndPoint dnsEndPoint)
+        internal SecureSocketConnector(SslClientAuthenticationOptions sslClientAuthenticationOptions, Encoding encoding, DnsEndPoint dnsEndPoint)
             : base(encoding, dnsEndPoint) => this.sslClientAuthenticationOptions = sslClientAuthenticationOptions;
 
         protected override async Task<Stream> Initialize(TcpClient tcpClient, CancellationToken cancellationToken)

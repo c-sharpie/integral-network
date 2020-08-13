@@ -1,5 +1,5 @@
-﻿using System.IO;
-using System.Net;
+﻿using System;
+using System.IO;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Text;
@@ -13,8 +13,8 @@ namespace Integral.Listeners
     {
         private readonly SslServerAuthenticationOptions sslServerAuthenticationOptions;
 
-        internal SecureSocketListener(SslServerAuthenticationOptions sslServerAuthenticationOptions, Encoding encoding, IPEndPoint ipEndPoint)
-            : base(encoding, ipEndPoint) => this.sslServerAuthenticationOptions = sslServerAuthenticationOptions;
+        internal SecureSocketListener(SslServerAuthenticationOptions sslServerAuthenticationOptions, Uri uri, Encoding encoding)
+            : base(uri, encoding) => this.sslServerAuthenticationOptions = sslServerAuthenticationOptions;
 
         protected override async Task<Stream> Initialize(TcpClient tcpClient, CancellationToken cancellationToken)
         {

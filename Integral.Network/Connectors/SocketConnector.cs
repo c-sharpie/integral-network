@@ -1,5 +1,5 @@
-﻿using System.IO;
-using System.Net;
+﻿using System;
+using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -13,22 +13,22 @@ namespace Integral.Connectors
 {
     internal class SocketConnector : Connector
     {
+        private readonly Uri uri;
+
         private readonly Encoding encoding;
 
-        private readonly DnsEndPoint dnsEndPoint;
-
-        internal SocketConnector(Encoding encoding, DnsEndPoint dnsEndPoint)
+        internal SocketConnector(Uri uri, Encoding encoding)
         {
+            this.uri = uri;
             this.encoding = encoding;
-            this.dnsEndPoint = dnsEndPoint;
         }
 
-        public override string ToString() => dnsEndPoint.ToString();
+        public override string ToString() => uri.ToString();
 
         public async Task<Transporter> Execute(CancellationToken cancellationToken)
         {
             TcpClient tcpClient = new TcpClientDecorator();
-            await tcpClient.ConnectAsync(dnsEndPoint.Host, dnsEndPoint.Port);
+            await tcpClient.ConnectAsync(uri.Host, uri.Port);
             return new SocketTransporter(new SocketConnection(tcpClient), new BufferedByteStream(await Initialize(tcpClient, cancellationToken)), encoding);
         }
 

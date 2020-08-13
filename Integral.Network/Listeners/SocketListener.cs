@@ -1,5 +1,5 @@
-﻿using System.IO;
-using System.Net;
+﻿using System;
+using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -15,7 +15,7 @@ namespace Integral.Listeners
     {
         private readonly Encoding encoding;
 
-        internal SocketListener(Encoding encoding, IPEndPoint ipEndPoint) : base(ipEndPoint) => this.encoding = encoding;
+        internal SocketListener(Uri uri, Encoding encoding) : base(uri) => this.encoding = encoding;
 
         public async Task<Transporter> Execute(CancellationToken cancellationToken)
         {

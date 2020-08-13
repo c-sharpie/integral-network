@@ -1,9 +1,7 @@
-﻿using System.Net;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Integral.Abstractions;
 using Integral.Collections;
-using Integral.Constants;
 using Integral.Factories;
 using Integral.Networks;
 using Integral.Registries;
@@ -17,10 +15,6 @@ namespace Integral.Tests
         private const int Connections = 100, Iterations = 100;
 
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-
-        private readonly Enumerable<DnsEndPoint> clientAddresses = new ListedCollection<DnsEndPoint> { NetworkConstant.DefaultDnsEndPoint };
-
-        private readonly Enumerable<IPEndPoint> serverAddresses = new ListedCollection<IPEndPoint> { NetworkConstant.DefaultIpEndPoint };
 
         private readonly ListedCollection<Task> tasks = new ListedCollection<Task>();
 
@@ -38,8 +32,11 @@ namespace Integral.Tests
             ServerRegistry serverRegistry = new ServerRegistry(Iterations * Connections);
             serverRegistry.OnComplete += cancellationTokenSource.Cancel;
 
+            ServerFactory serverFactory = new ServerFactory();
+            serverFactory.ChannelRegistry = serverRegistry;
+
             NetworkFactory networkFactory = new NetworkFactory();
-            networkFactory.Add(serverRegistry, serverAddresses);
+            networkFactory.Add(serverFactory);
             Network network = networkFactory.Create();
 
             tasks.Add(Run(network, serverRegistry, cancellationTokenSource.Token));
@@ -51,8 +48,11 @@ namespace Integral.Tests
             {
                 ClientRegistry clientRegistry = new ClientRegistry(Iterations);
 
+                ClientFactory clientFactory = new ClientFactory();
+                clientFactory.ChannelRegistry = clientRegistry;
+
                 NetworkFactory networkFactory = new NetworkFactory();
-                networkFactory.Add(clientRegistry, clientAddresses);
+                networkFactory.Add(clientFactory);
                 Network network = networkFactory.Create();
 
                 tasks.Add(Run(network, clientRegistry, cancellationTokenSource.Token));

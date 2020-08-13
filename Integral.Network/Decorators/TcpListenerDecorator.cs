@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using Integral.Constants;
@@ -7,7 +8,7 @@ namespace Integral.Decorators
 {
     internal abstract class TcpListenerDecorator : TcpListener
     {
-        protected TcpListenerDecorator(IPEndPoint ipEndPoint) : base(ipEndPoint)
+        protected TcpListenerDecorator(Uri uri) : base(new IPEndPoint(IPAddress.Parse(uri.Host), uri.Port))
         {
         }
 

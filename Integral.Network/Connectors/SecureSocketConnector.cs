@@ -1,5 +1,5 @@
-﻿using System.IO;
-using System.Net;
+﻿using System;
+using System.IO;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Text;
@@ -13,8 +13,8 @@ namespace Integral.Connectors
     {
         private readonly SslClientAuthenticationOptions sslClientAuthenticationOptions;
 
-        internal SecureSocketConnector(SslClientAuthenticationOptions sslClientAuthenticationOptions, Encoding encoding, DnsEndPoint dnsEndPoint)
-            : base(encoding, dnsEndPoint) => this.sslClientAuthenticationOptions = sslClientAuthenticationOptions;
+        internal SecureSocketConnector(SslClientAuthenticationOptions sslClientAuthenticationOptions, Uri uri, Encoding encoding)
+            : base(uri, encoding) => this.sslClientAuthenticationOptions = sslClientAuthenticationOptions;
 
         protected override async Task<Stream> Initialize(TcpClient tcpClient, CancellationToken cancellationToken)
         {

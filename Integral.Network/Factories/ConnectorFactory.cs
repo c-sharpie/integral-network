@@ -1,4 +1,4 @@
-﻿using System.Net;
+﻿using System;
 using System.Net.Security;
 using Integral.Connectors;
 using Integral.Constants;
@@ -7,18 +7,18 @@ namespace Integral.Factories
 {
     public sealed class ConnectorFactory : TransportFactory, Factory<Connector>
     {
-        public DnsEndPoint DnsEndPoint { get; set; } = NetworkConstant.DefaultDnsEndPoint;
+        public Uri Uri { get; set; } = NetworkConstant.DefaultUri;
 
         public Connector Create()
         {
             if (Encrypt)
             {
                 SslClientAuthenticationOptions sslClientAuthenticationOptions = new SslClientAuthenticationOptions();
-                sslClientAuthenticationOptions.TargetHost = DnsEndPoint.Host;
-                return new SecureSocketConnector(sslClientAuthenticationOptions, Encoding, DnsEndPoint);
+                sslClientAuthenticationOptions.TargetHost = Uri.DnsSafeHost;
+                return new SecureSocketConnector(sslClientAuthenticationOptions, Uri, Encoding);
             }
 
-            return new SocketConnector(Encoding, DnsEndPoint);
+            return new SocketConnector(Uri, Encoding);
         }
     }
 }

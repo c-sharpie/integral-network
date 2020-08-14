@@ -15,7 +15,7 @@ namespace Integral.Tests
     [TestClass]
     public class SpeedTest
     {
-        private const bool webSockets = false;
+        private const bool webSockets = true;
 
         private const int Connections = 100, Iterations = 100;
 
@@ -37,7 +37,7 @@ namespace Integral.Tests
         {
             ListenerFactory listenerFactory = new ListenerFactory();
             listenerFactory.Uri = new Uri(webSockets ? "http://localhost:5001/" : "tcp://127.0.0.1:7000");
-            using Listener listener = listenerFactory.Create();
+            Listener listener = listenerFactory.Create();
             for (int i = 0; i < Connections; i++)
             {
                 DataPacket dataPacket = dataPackets[1][i];

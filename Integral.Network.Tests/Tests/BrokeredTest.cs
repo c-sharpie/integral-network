@@ -13,7 +13,7 @@ namespace Integral.Tests
     [TestClass]
     public class BrokeredTest
     {
-        private const bool webSockets = false;
+        private const bool webSockets = true;
 
         private const int Connections = 100, Iterations = 100;
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
@@ -28,10 +27,7 @@ namespace Integral.Connectors
         {
             ClientWebSocket clientWebSocket = new ClientWebSocket();
             await clientWebSocket.ConnectAsync(uri, cancellationToken);
-            return new SocketTransporter(new WebSocketConnection(clientWebSocket), new BufferedByteStream(new MemoryStream()), encoding);
-
-            //await clientWebSocket.SendAsync(bytesToSend, WebSocketMessageType.Text, true, CancellationToken.None);
-            //WebSocketReceiveResult result = await clientWebSocket.ReceiveAsync(bytesReceived, CancellationToken.None);
+            return new SocketTransporter(new WebSocketConnection(clientWebSocket), new BufferedByteStream(new WebSocketStream(clientWebSocket)), encoding);
         }
     }
 }

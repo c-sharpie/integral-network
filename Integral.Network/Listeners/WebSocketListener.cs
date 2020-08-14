@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
@@ -21,10 +20,7 @@ namespace Integral.Listeners
         public async Task<Transporter> Execute(CancellationToken cancellationToken)
         {
             WebSocket webSocket = await Accept();
-            return new SocketTransporter(new WebSocketConnection(webSocket), new BufferedByteStream(new MemoryStream()), encoding);
-
-            //await clientWebSocket.SendAsync(bytesToSend, WebSocketMessageType.Text, true, CancellationToken.None);
-            //WebSocketReceiveResult result = await clientWebSocket.ReceiveAsync(bytesReceived, CancellationToken.None);
+            return new SocketTransporter(new WebSocketConnection(webSocket), new BufferedByteStream(new WebSocketStream(webSocket)), encoding);
         }
     }
 }

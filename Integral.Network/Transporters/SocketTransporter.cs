@@ -31,7 +31,7 @@ namespace Integral.Transporters
 
         public async ValueTask Read(Deserializable deserializable, CancellationToken cancellationToken)
         {
-            while (byteStream.CanRead)
+            if (byteStream.CanRead)
             {
                 await deserializable.Read(primitiveReader, cancellationToken);
             }

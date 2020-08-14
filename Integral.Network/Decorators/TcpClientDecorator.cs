@@ -7,9 +7,14 @@ namespace Integral.Decorators
     {
         internal TcpClientDecorator()
         {
-            SendBufferSize = ReceiveBufferSize = NetworkConstant.DefaultBufferSize;
-            SendTimeout = ReceiveTimeout = NetworkConstant.DefaultTimeout;
-            NoDelay = true;
+            Upgrade(this);
+        }
+
+        public static void Upgrade(TcpClient tcpClient)
+        {
+            tcpClient.SendTimeout = tcpClient.ReceiveTimeout = NetworkConstant.DefaultTimeout.Milliseconds;
+            tcpClient.SendBufferSize = tcpClient.ReceiveBufferSize = NetworkConstant.DefaultBufferSize;
+            tcpClient.NoDelay = true;
         }
     }
 }

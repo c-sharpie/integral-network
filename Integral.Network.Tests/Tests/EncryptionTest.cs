@@ -16,6 +16,8 @@ namespace Integral.Tests
     [TestClass]
     public class EncryptionTest : Packet
     {
+        //private const bool webSockets = false;
+
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
         private string result = string.Empty, expected = "test";

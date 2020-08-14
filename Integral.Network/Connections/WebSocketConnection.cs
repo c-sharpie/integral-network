@@ -11,7 +11,7 @@ namespace Integral.Connections
         {
             this.webSocket = webSocket;
 
-            Log.Write("Connected web socket.");
+            Log.Write($"Connected {webSocket}");
         }
 
         public bool Enabled => webSocket.State == WebSocketState.Open;
@@ -22,7 +22,7 @@ namespace Integral.Connections
         {
             webSocket.Dispose();
 
-            Log.Write("Disconnected  web socket.");
+            Log.Write($"Disconnected {webSocket}");
         }
     }
 }

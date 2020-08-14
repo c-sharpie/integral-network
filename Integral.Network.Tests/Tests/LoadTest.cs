@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Integral.Collections;
 using Integral.Connectors;
@@ -13,6 +14,8 @@ namespace Integral.Tests
     [TestClass]
     public class LoadTest
     {
+        private const bool webSockets = false;
+
         private const int Connections = 100, Iterations = 100, Ping = 100, Bytes = 100;
 
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
@@ -32,6 +35,7 @@ namespace Integral.Tests
         private async Task Accept()
         {
             ListenerFactory listenerFactory = new ListenerFactory();
+            listenerFactory.Uri = new Uri(webSockets ? "http://localhost:5001/" : "tcp://127.0.0.1:7000");
             using Listener listener = listenerFactory.Create();
             for (int i = 0; i < Connections; i++)
             {
@@ -46,6 +50,7 @@ namespace Integral.Tests
         private async Task Connect()
         {
             ConnectorFactory connectorFactory = new ConnectorFactory();
+            connectorFactory.Uri = new Uri(webSockets ? "ws://localhost:5001/" : "tcp://127.0.0.1:7000");
             for (int i = 0; i < Connections; i++)
             {
                 Connector connector = connectorFactory.Create();

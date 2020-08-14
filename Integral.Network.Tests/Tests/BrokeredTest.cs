@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Integral.Abstractions;
 using Integral.Collections;
@@ -12,6 +13,8 @@ namespace Integral.Tests
     [TestClass]
     public class BrokeredTest
     {
+        private const bool webSockets = false;
+
         private const int Connections = 100, Iterations = 100;
 
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
@@ -29,10 +32,14 @@ namespace Integral.Tests
 
         private void Accept()
         {
+            ListenerFactory listenerFactory = new ListenerFactory();
+            listenerFactory.Uri = new Uri(webSockets ? "http://localhost:5001/" : "tcp://127.0.0.1:7000");
+
             ServerRegistry serverRegistry = new ServerRegistry(Iterations * Connections);
             serverRegistry.OnComplete += cancellationTokenSource.Cancel;
 
             ServerFactory serverFactory = new ServerFactory();
+            serverFactory.ListenerFactory = listenerFactory;
             serverFactory.ChannelRegistry = serverRegistry;
 
             NetworkFactory networkFactory = new NetworkFactory();
@@ -46,9 +53,13 @@ namespace Integral.Tests
         {
             for (int i = 0; i < Connections; i++)
             {
+                ConnectorFactory connectorFactory = new ConnectorFactory();
+                connectorFactory.Uri = new Uri(webSockets ? "ws://localhost:5001/" : "tcp://127.0.0.1:7000");
+
                 ClientRegistry clientRegistry = new ClientRegistry(Iterations);
 
                 ClientFactory clientFactory = new ClientFactory();
+                clientFactory.ConnectorFactory = connectorFactory;
                 clientFactory.ChannelRegistry = clientRegistry;
 
                 NetworkFactory networkFactory = new NetworkFactory();

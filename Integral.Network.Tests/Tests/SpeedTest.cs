@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Integral.Collections;
@@ -14,6 +15,8 @@ namespace Integral.Tests
     [TestClass]
     public class SpeedTest
     {
+        private const bool webSockets = false;
+
         private const int Connections = 100, Iterations = 100;
 
         private readonly DataPacket[][] dataPackets = DataPacket.CreatePrimitivePackets(Connections, Iterations);
@@ -33,6 +36,7 @@ namespace Integral.Tests
         private async Task Accept()
         {
             ListenerFactory listenerFactory = new ListenerFactory();
+            listenerFactory.Uri = new Uri(webSockets ? "http://localhost:5001/" : "tcp://127.0.0.1:7000");
             using Listener listener = listenerFactory.Create();
             for (int i = 0; i < Connections; i++)
             {
@@ -45,6 +49,7 @@ namespace Integral.Tests
         private async Task Connect()
         {
             ConnectorFactory connectorFactory = new ConnectorFactory();
+            connectorFactory.Uri = new Uri(webSockets ? "ws://localhost:5001/" : "tcp://127.0.0.1:7000");
             for (int i = 0; i < Connections; i++)
             {
                 DataPacket dataPacket = dataPackets[0][i];

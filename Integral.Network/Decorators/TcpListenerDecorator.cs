@@ -2,7 +2,6 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using Integral.Constants;
 
 namespace Integral.Decorators
 {
@@ -11,8 +10,6 @@ namespace Integral.Decorators
         protected TcpListenerDecorator(Uri uri) : base(new IPEndPoint(IPAddress.Parse(uri.Host), uri.Port))
         {
         }
-
-        public bool Enabled => Active;
 
         public override string ToString() => (Active ? LocalEndpoint.ToString() : IPAddress.None.ToString())!;
 
@@ -24,9 +21,7 @@ namespace Integral.Decorators
             }
 
             TcpClient tcpClient = await AcceptTcpClientAsync();
-            tcpClient.SendBufferSize = tcpClient.ReceiveBufferSize = NetworkConstant.DefaultBufferSize;
-            tcpClient.SendTimeout = tcpClient.ReceiveTimeout = NetworkConstant.DefaultTimeout;
-            tcpClient.NoDelay = true;
+            TcpClientDecorator.Upgrade(tcpClient);
             return tcpClient;
         }
 

@@ -34,19 +34,19 @@ namespace Integral.Tests
             ListenerFactory listenerFactory = new ListenerFactory();
             listenerFactory.Uri = new Uri(webSockets ? "http://localhost:5001/" : "tcp://127.0.0.1:7000");
 
-            ServerRegistry serverRegistry = new ServerRegistry(Iterations * Connections);
-            serverRegistry.OnComplete += cancellationTokenSource.Cancel;
+            ServerSample serverSample = new ServerSample(Iterations * Connections);
+            serverSample.OnComplete += cancellationTokenSource.Cancel;
 
             ServerFactory serverFactory = new ServerFactory();
             serverFactory.ListenerFactory = listenerFactory;
-            serverFactory.ChannelRegistry = serverRegistry;
+            serverFactory.ChannelRegistry = serverSample;
 
             NetworkFactory networkFactory = new NetworkFactory();
-            networkFactory.Executable = serverRegistry;
+            networkFactory.Executable = serverSample;
             networkFactory.Add(serverFactory);
             Network network = networkFactory.Create();
 
-            tasks.Add(Run(network, cancellationTokenSource.Token));
+            tasks.Add(network.Execute(cancellationTokenSource.Token));
         }
 
         private void Connect()
@@ -56,33 +56,18 @@ namespace Integral.Tests
                 ConnectorFactory connectorFactory = new ConnectorFactory();
                 connectorFactory.Uri = new Uri(webSockets ? "ws://localhost:5001/" : "tcp://127.0.0.1:7000");
 
-                ClientRegistry clientRegistry = new ClientRegistry(Iterations);
+                ClientSample clientSample = new ClientSample(Iterations);
 
                 ClientFactory clientFactory = new ClientFactory();
                 clientFactory.ConnectorFactory = connectorFactory;
-                clientFactory.ChannelRegistry = clientRegistry;
+                clientFactory.ChannelRegistry = clientSample;
 
                 NetworkFactory networkFactory = new NetworkFactory();
-                networkFactory.Executable = clientRegistry;
+                networkFactory.Executable = clientSample;
                 networkFactory.Add(clientFactory);
                 Network network = networkFactory.Create();
 
-                tasks.Add(Run(network, cancellationTokenSource.Token));
-            }
-        }
-
-        private async Task Run(Network network, CancellationToken cancellationToken)
-        {
-            await network.Initialize(cancellationToken);
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                try
-                {
-                    await network.Execute(cancellationToken);
-                }
-                catch (TaskCanceledException)
-                {
-                }
+                tasks.Add(network.Execute(cancellationTokenSource.Token));
             }
         }
     }

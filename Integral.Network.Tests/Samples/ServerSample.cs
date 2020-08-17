@@ -8,13 +8,13 @@ using Integral.Subscribers;
 
 namespace Integral.Registries
 {
-    internal sealed class ServerRegistry : Subscriber<EmptyPacket>, Registry<Channel>, Executable<Task>
+    internal sealed class ServerSample : Subscriber<EmptyPacket>, Registry<Channel>, Executable<Task>
     {
         private readonly int iterations;
 
         private int current = 0;
 
-        internal ServerRegistry(int iterations) => this.iterations = iterations;
+        internal ServerSample(int iterations) => this.iterations = iterations;
 
         internal event Action? OnComplete;
 

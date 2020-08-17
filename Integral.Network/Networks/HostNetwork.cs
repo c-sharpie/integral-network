@@ -20,7 +20,7 @@ namespace Integral.Networks
             }
         }
 
-        public async Task Execute(CancellationToken cancellationToken)
+        public async Task Iterate(CancellationToken cancellationToken)
         {
             foreach (Host host in this)
             {
@@ -28,6 +28,15 @@ namespace Integral.Networks
             }
 
             await executable.Execute(cancellationToken);
+        }
+
+        public async Task Execute(CancellationToken cancellationToken)
+        {
+            await Initialize(cancellationToken);
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                await Iterate(cancellationToken);
+            }
         }
     }
 }

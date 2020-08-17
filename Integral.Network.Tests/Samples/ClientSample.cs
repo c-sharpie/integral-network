@@ -8,11 +8,11 @@ using Integral.Publishers;
 
 namespace Integral.Registries
 {
-    internal sealed class ClientRegistry : GenericPublisher<Action<EmptyPacket>>, Registry<Channel>, Executable<Task>
+    internal sealed class ClientSample : GenericPublisher<Action<EmptyPacket>>, Registry<Channel>, Executable<Task>
     {
         private int iterations, current = 0;
 
-        internal ClientRegistry(int iterations) => this.iterations = iterations;
+        internal ClientSample(int iterations) => this.iterations = iterations;
 
         public async Task Execute(CancellationToken cancellationToken)
         {

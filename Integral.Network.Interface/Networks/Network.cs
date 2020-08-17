@@ -3,7 +3,7 @@ using Integral.Abstractions;
 
 namespace Integral.Networks
 {
-    public interface Network : Initializable<Task>, Executable<Task>
+    public interface Network : Initializable<Task>, Iterable<Task>, Executable<Task>
     {
     }
 }

@@ -25,15 +25,10 @@ namespace Integral.Writers
         {
             int length = encoding.GetByteCount(value);
             await WriteEncodedInt32(length, cancellationToken);
-            if (buffer.Length < byte.MaxValue)
+            if (buffer.Length < length)
             {
-                buffer = new byte[byte.MaxValue];
-            }
-
-            if (length > byte.MaxValue)
-            {
-                // TODO
-                throw new NotImplementedException();
+                // TODO: Implement max string length.
+                buffer = new byte[length];
             }
 
             encoding.GetBytes(value, buffer.Span);

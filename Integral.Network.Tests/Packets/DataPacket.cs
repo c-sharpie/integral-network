@@ -31,7 +31,7 @@ namespace Integral.Packets
                 ULongValue = (ulong)(Random.Next() * 2 - int.MaxValue);
                 FloatValue = (float)Random.NextDouble();
                 DoubleValue = Random.NextDouble();
-                StringValue = new string("Test".OrderBy(s => Random.Next(2) % 2 == 0).ToArray());
+                StringValue = new string("Value".OrderBy(s => Random.Next(2) % 2 == 0).ToArray());
             }
             else
             {

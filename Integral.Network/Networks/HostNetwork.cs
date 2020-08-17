@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Integral.Abstractions;
 using Integral.Collections;
 using Integral.Hosts;
 
@@ -7,6 +8,10 @@ namespace Integral.Networks
 {
     internal sealed class HostNetwork : ListedCollection<Host>, Network
     {
+        private readonly Executable<Task> executable;
+
+        internal HostNetwork(Executable<Task> executable) => this.executable = executable;
+
         public async Task Initialize(CancellationToken cancellationToken)
         {
             foreach (Host host in this)
@@ -21,6 +26,8 @@ namespace Integral.Networks
             {
                 await host.Execute(cancellationToken);
             }
+
+            await executable.Execute(cancellationToken);
         }
     }
 }

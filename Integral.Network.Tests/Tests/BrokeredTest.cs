@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Integral.Abstractions;
 using Integral.Collections;
 using Integral.Factories;
 using Integral.Networks;
@@ -43,10 +42,11 @@ namespace Integral.Tests
             serverFactory.ChannelRegistry = serverRegistry;
 
             NetworkFactory networkFactory = new NetworkFactory();
+            networkFactory.Executable = serverRegistry;
             networkFactory.Add(serverFactory);
             Network network = networkFactory.Create();
 
-            tasks.Add(Run(network, serverRegistry, cancellationTokenSource.Token));
+            tasks.Add(Run(network, cancellationTokenSource.Token));
         }
 
         private void Connect()
@@ -63,14 +63,15 @@ namespace Integral.Tests
                 clientFactory.ChannelRegistry = clientRegistry;
 
                 NetworkFactory networkFactory = new NetworkFactory();
+                networkFactory.Executable = clientRegistry;
                 networkFactory.Add(clientFactory);
                 Network network = networkFactory.Create();
 
-                tasks.Add(Run(network, clientRegistry, cancellationTokenSource.Token));
+                tasks.Add(Run(network, cancellationTokenSource.Token));
             }
         }
 
-        private async Task Run(Network network, Executable<Task> executable, CancellationToken cancellationToken)
+        private async Task Run(Network network, CancellationToken cancellationToken)
         {
             await network.Initialize(cancellationToken);
             while (!cancellationToken.IsCancellationRequested)
@@ -78,7 +79,6 @@ namespace Integral.Tests
                 try
                 {
                     await network.Execute(cancellationToken);
-                    await executable.Execute(cancellationToken);
                 }
                 catch (TaskCanceledException)
                 {

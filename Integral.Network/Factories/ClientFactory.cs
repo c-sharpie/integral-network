@@ -1,11 +1,12 @@
 ﻿using Integral.Clients;
+using Integral.Connectors;
 
 namespace Integral.Factories
 {
     public sealed class ClientFactory : HostFactory<Client>
     {
-        public ConnectorFactory ConnectorFactory { get; set; } = new ConnectorFactory();
+        public Factory<Connector>? ConnectorFactory { get; set; }
 
-        public override Client Create() => new SessionClient(ConnectorFactory.Create(), ChannelRegistry!);
+        public override Client Create() => new SessionClient(ConnectorFactory!.Create(), ChannelRegistry!);
     }
 }

@@ -22,7 +22,7 @@ namespace Integral.Servers
 
         public override Task Initialize(CancellationToken cancellationToken) => listenTask = listener.Execute(cancellationToken);
 
-        public override async Task Execute(CancellationToken cancellationToken)
+        public override async Task Iterate(CancellationToken cancellationToken)
         {
             if (listenTask!.IsCompleted)
             {

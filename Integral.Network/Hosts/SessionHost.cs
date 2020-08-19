@@ -1,7 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Integral.Channels;
-using Integral.Factories;
 using Integral.Registries;
 using Integral.Sessions;
 using Integral.Transporters;
@@ -16,13 +15,11 @@ namespace Integral.Hosts
 
         public abstract Task Initialize(CancellationToken cancellationToken);
 
-        public abstract Task Execute(CancellationToken cancellationToken);
+        public abstract Task Iterate(CancellationToken cancellationToken);
 
         protected Session Initialize(Transporter transporter)
         {
-            SessionFactory sessionFactory = new SessionFactory();
-            sessionFactory.Transporter = transporter;
-            Session session = sessionFactory.Create();
+            Session session = new TransporterSession(transporter);
 
             registry.Register(session);
 

@@ -3,7 +3,7 @@ using Integral.Abstractions;
 
 namespace Integral.Hosts
 {
-    public interface Host : Initializable<Task>, Executable<Task>
+    public interface Host : Initializable<Task>, Iterable<Task>
     {
     }
 }

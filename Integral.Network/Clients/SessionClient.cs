@@ -21,7 +21,7 @@ namespace Integral.Clients
 
         public override Task Initialize(CancellationToken cancellationToken) => connectTask = connector.Execute(cancellationToken);
 
-        public override async Task Execute(CancellationToken cancellationToken)
+        public override async Task Iterate(CancellationToken cancellationToken)
         {
             if (session != null)
             {

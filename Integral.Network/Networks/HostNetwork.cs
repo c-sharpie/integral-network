@@ -24,7 +24,7 @@ namespace Integral.Networks
         {
             foreach (Host host in this)
             {
-                await host.Execute(cancellationToken);
+                await host.Iterate(cancellationToken);
             }
 
             await executable.Execute(cancellationToken);

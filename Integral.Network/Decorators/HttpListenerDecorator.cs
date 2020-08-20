@@ -28,7 +28,7 @@ namespace Integral.Decorators
             }
             else
             {
-                throw new NotSupportedException();
+                return await Accept();
             }
         }
 

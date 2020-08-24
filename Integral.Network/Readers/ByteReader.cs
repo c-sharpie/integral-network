@@ -24,7 +24,7 @@ namespace Integral.Readers
 
         public async ValueTask<string> ReadString(CancellationToken cancellationToken)
         {
-            int length = await ReadEncodedInt32(cancellationToken);
+            int length = await ReadInt32(cancellationToken);
             if (buffer.Length < byte.MaxValue)
             {
                 buffer = new byte[byte.MaxValue];
@@ -113,11 +113,11 @@ namespace Integral.Readers
         }
 
         public async ValueTask<Enumeration> ReadEnum<Enumeration>(CancellationToken cancellationToken)
-            where Enumeration : Enum => (Enumeration)Enum.ToObject(typeof(Enumeration), await ReadEncodedInt32(cancellationToken));
+            where Enumeration : Enum => (Enumeration)Enum.ToObject(typeof(Enumeration), await ReadInt32(cancellationToken));
 
         public async ValueTask<string[]> ReadStringArray(CancellationToken cancellationToken)
         {
-            int count = await ReadEncodedInt32(cancellationToken);
+            int count = await ReadInt32(cancellationToken);
             string[] value = new string[count];
             for (int i = 0; i < count; i++)
             {
@@ -129,7 +129,7 @@ namespace Integral.Readers
 
         public async ValueTask<bool[]> ReadBoolArray(CancellationToken cancellationToken)
         {
-            int count = await ReadEncodedInt32(cancellationToken);
+            int count = await ReadInt32(cancellationToken);
             bool[] value = new bool[count];
             for (int i = 0; i < count; i++)
             {
@@ -149,7 +149,7 @@ namespace Integral.Readers
 
         public async ValueTask<sbyte[]> ReadSByteArray(CancellationToken cancellationToken)
         {
-            int count = await ReadEncodedInt32(cancellationToken);
+            int count = await ReadInt32(cancellationToken);
             sbyte[] value = new sbyte[count];
             for (int i = 0; i < count; i++)
             {
@@ -161,7 +161,7 @@ namespace Integral.Readers
 
         public async ValueTask<short[]> ReadInt16Array(CancellationToken cancellationToken)
         {
-            int count = await ReadEncodedInt32(cancellationToken);
+            int count = await ReadInt32(cancellationToken);
             short[] value = new short[count];
             for (int i = 0; i < count; i++)
             {
@@ -173,7 +173,7 @@ namespace Integral.Readers
 
         public async ValueTask<int[]> ReadInt32Array(CancellationToken cancellationToken)
         {
-            int count = await ReadEncodedInt32(cancellationToken);
+            int count = await ReadInt32(cancellationToken);
             int[] value = new int[count];
             for (int i = 0; i < count; i++)
             {
@@ -185,7 +185,7 @@ namespace Integral.Readers
 
         public async ValueTask<long[]> ReadInt64Array(CancellationToken cancellationToken)
         {
-            int count = await ReadEncodedInt32(cancellationToken);
+            int count = await ReadInt32(cancellationToken);
             long[] value = new long[count];
             for (int i = 0; i < count; i++)
             {
@@ -197,7 +197,7 @@ namespace Integral.Readers
 
         public async ValueTask<ushort[]> ReadUInt16Array(CancellationToken cancellationToken)
         {
-            int count = await ReadEncodedInt32(cancellationToken);
+            int count = await ReadInt32(cancellationToken);
             ushort[] value = new ushort[count];
             for (int i = 0; i < count; i++)
             {
@@ -209,7 +209,7 @@ namespace Integral.Readers
 
         public async ValueTask<uint[]> ReadUInt32Array(CancellationToken cancellationToken)
         {
-            int count = await ReadEncodedInt32(cancellationToken);
+            int count = await ReadInt32(cancellationToken);
             uint[] value = new uint[count];
             for (int i = 0; i < count; i++)
             {
@@ -221,7 +221,7 @@ namespace Integral.Readers
 
         public async ValueTask<ulong[]> ReadUInt64Array(CancellationToken cancellationToken)
         {
-            int count = await ReadEncodedInt32(cancellationToken);
+            int count = await ReadInt32(cancellationToken);
             ulong[] value = new ulong[count];
             for (int i = 0; i < count; i++)
             {
@@ -233,7 +233,7 @@ namespace Integral.Readers
 
         public async ValueTask<float[]> ReadSingleArray(CancellationToken cancellationToken)
         {
-            int count = await ReadEncodedInt32(cancellationToken);
+            int count = await ReadInt32(cancellationToken);
             float[] value = new float[count];
             for (int i = 0; i < count; i++)
             {
@@ -245,7 +245,7 @@ namespace Integral.Readers
 
         public async ValueTask<double[]> ReadDoubleArray(CancellationToken cancellationToken)
         {
-            int count = await ReadEncodedInt32(cancellationToken);
+            int count = await ReadInt32(cancellationToken);
             double[] value = new double[count];
             for (int i = 0; i < count; i++)
             {
@@ -257,7 +257,7 @@ namespace Integral.Readers
 
         public async ValueTask<Guid[]> ReadGuidArray(CancellationToken cancellationToken)
         {
-            int count = await ReadEncodedInt32(cancellationToken);
+            int count = await ReadInt32(cancellationToken);
             Guid[] value = new Guid[count];
             for (int i = 0; i < count; i++)
             {
@@ -270,27 +270,13 @@ namespace Integral.Readers
         public async ValueTask<Enumeration[]> ReadEnumArray<Enumeration>(CancellationToken cancellationToken)
             where Enumeration : Enum
         {
-            int count = await ReadEncodedInt32(cancellationToken);
+            int count = await ReadInt32(cancellationToken);
             Enumeration[] value = new Enumeration[count];
             for (int i = 0; i < count; i++)
             {
                 value[i] = await ReadEnum<Enumeration>(cancellationToken);
             }
 
-            return value;
-        }
-
-        private async ValueTask<int> ReadEncodedInt32(CancellationToken cancellationToken)
-        {
-            int value = 0;
-            int shift = 0;
-            byte current;
-            do
-            {
-                current = await ReadByte(cancellationToken);
-                value |= (current & sbyte.MaxValue) << shift;
-                shift += 7;
-            } while ((current & 128) > 0);
             return value;
         }
 
@@ -311,5 +297,19 @@ namespace Integral.Readers
             ulong value = (ulong)high << 32 | low;
             return *((double*)&value);
         }
+
+        //private async ValueTask<int> ReadEncodedInt32(CancellationToken cancellationToken)
+        //{
+        //    int value = 0;
+        //    int shift = 0;
+        //    byte current;
+        //    do
+        //    {
+        //        current = await ReadByte(cancellationToken);
+        //        value |= (current & sbyte.MaxValue) << shift;
+        //        shift += 7;
+        //    } while ((current & 128) > 0);
+        //    return value;
+        //}
     }
 }

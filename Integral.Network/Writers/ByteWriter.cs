@@ -24,7 +24,7 @@ namespace Integral.Writers
         public async ValueTask Write(string value, CancellationToken cancellationToken)
         {
             int length = encoding.GetByteCount(value);
-            await WriteEncodedInt32(length, cancellationToken);
+            await Write(length, cancellationToken);
             if (buffer.Length < length)
             {
                 // TODO: Implement max string length.
@@ -104,11 +104,11 @@ namespace Integral.Writers
         public async ValueTask Write(Guid value, CancellationToken cancellationToken) => await writeStream.WriteAsync(value.ToByteArray(), cancellationToken);
 
         public async ValueTask Write<Enumeration>(Enumeration value, CancellationToken cancellationToken)
-            where Enumeration : Enum => await WriteEncodedInt32(Convert.ToInt32(value), cancellationToken);
+            where Enumeration : Enum => await Write(Convert.ToInt32(value), cancellationToken);
 
         public async ValueTask Write(string[] value, CancellationToken cancellationToken)
         {
-            await WriteEncodedInt32(value.Length, cancellationToken);
+            await Write(value.Length, cancellationToken);
             foreach (string element in value)
             {
                 await Write(element, cancellationToken);
@@ -117,7 +117,7 @@ namespace Integral.Writers
 
         public async ValueTask Write(bool[] value, CancellationToken cancellationToken)
         {
-            await WriteEncodedInt32(value.Length, cancellationToken);
+            await Write(value.Length, cancellationToken);
             foreach (bool element in value)
             {
                 await Write(element, cancellationToken);
@@ -132,7 +132,7 @@ namespace Integral.Writers
 
         public async ValueTask Write(sbyte[] value, CancellationToken cancellationToken)
         {
-            await WriteEncodedInt32(value.Length, cancellationToken);
+            await Write(value.Length, cancellationToken);
             foreach (sbyte element in value)
             {
                 await Write(element, cancellationToken);
@@ -141,7 +141,7 @@ namespace Integral.Writers
 
         public async ValueTask Write(short[] value, CancellationToken cancellationToken)
         {
-            await WriteEncodedInt32(value.Length, cancellationToken);
+            await Write(value.Length, cancellationToken);
             foreach (short element in value)
             {
                 await Write(element, cancellationToken);
@@ -150,7 +150,7 @@ namespace Integral.Writers
 
         public async ValueTask Write(int[] value, CancellationToken cancellationToken)
         {
-            await WriteEncodedInt32(value.Length, cancellationToken);
+            await Write(value.Length, cancellationToken);
             foreach (int element in value)
             {
                 await Write(element, cancellationToken);
@@ -159,7 +159,7 @@ namespace Integral.Writers
 
         public async ValueTask Write(long[] value, CancellationToken cancellationToken)
         {
-            await WriteEncodedInt32(value.Length, cancellationToken);
+            await Write(value.Length, cancellationToken);
             foreach (long element in value)
             {
                 await Write(element, cancellationToken);
@@ -168,7 +168,7 @@ namespace Integral.Writers
 
         public async ValueTask Write(ushort[] value, CancellationToken cancellationToken)
         {
-            await WriteEncodedInt32(value.Length, cancellationToken);
+            await Write(value.Length, cancellationToken);
             foreach (ushort element in value)
             {
                 await Write(element, cancellationToken);
@@ -177,7 +177,7 @@ namespace Integral.Writers
 
         public async ValueTask Write(uint[] value, CancellationToken cancellationToken)
         {
-            await WriteEncodedInt32(value.Length, cancellationToken);
+            await Write(value.Length, cancellationToken);
             foreach (uint element in value)
             {
                 await Write(element, cancellationToken);
@@ -186,7 +186,7 @@ namespace Integral.Writers
 
         public async ValueTask Write(ulong[] value, CancellationToken cancellationToken)
         {
-            await WriteEncodedInt32(value.Length, cancellationToken);
+            await Write(value.Length, cancellationToken);
             foreach (ulong element in value)
             {
                 await Write(element, cancellationToken);
@@ -195,7 +195,7 @@ namespace Integral.Writers
 
         public async ValueTask Write(float[] value, CancellationToken cancellationToken)
         {
-            await WriteEncodedInt32(value.Length, cancellationToken);
+            await Write(value.Length, cancellationToken);
             foreach (float element in value)
             {
                 await Write(element, cancellationToken);
@@ -204,7 +204,7 @@ namespace Integral.Writers
 
         public async ValueTask Write(double[] value, CancellationToken cancellationToken)
         {
-            await WriteEncodedInt32(value.Length, cancellationToken);
+            await Write(value.Length, cancellationToken);
             foreach (double element in value)
             {
                 await Write(element, cancellationToken);
@@ -213,7 +213,7 @@ namespace Integral.Writers
 
         public async ValueTask Write(Guid[] value, CancellationToken cancellationToken)
         {
-            await WriteEncodedInt32(value.Length, cancellationToken);
+            await Write(value.Length, cancellationToken);
             foreach (Guid element in value)
             {
                 await Write(element, cancellationToken);
@@ -223,22 +223,11 @@ namespace Integral.Writers
         public async ValueTask Write<Enumeration>(Enumeration[] value, CancellationToken cancellationToken)
             where Enumeration : Enum
         {
-            await WriteEncodedInt32(value.Length, cancellationToken);
+            await Write(value.Length, cancellationToken);
             foreach (Enumeration element in value)
             {
                 await Write(element, cancellationToken);
             }
-        }
-
-        private async ValueTask WriteEncodedInt32(int value, CancellationToken cancellationToken)
-        {
-            while (value > sbyte.MaxValue)
-            {
-                await Write((byte)(value | 128), cancellationToken);
-                value >>= 7;
-            }
-
-            await Write((byte)value, cancellationToken);
         }
 
         private void Write(byte value) => buffer.Span[0] = value;
@@ -266,5 +255,16 @@ namespace Integral.Writers
             span[6] = (byte)(convertedValue >> 48);
             span[7] = (byte)(convertedValue >> 56);
         }
+
+        //private async ValueTask WriteEncodedInt32(int value, CancellationToken cancellationToken)
+        //{
+        //    while (value > sbyte.MaxValue)
+        //    {
+        //        await Write((byte)(value | 128), cancellationToken);
+        //        value >>= 7;
+        //    }
+
+        //    await Write((byte)value, cancellationToken);
+        //}
     }
 }

@@ -14,7 +14,7 @@ namespace Integral.Tests
     [TestClass]
     public class LoadTest
     {
-        private const bool webSockets = true;
+        private const bool webSockets = false;
 
         private const int Connections = 100, Iterations = 100, Ping = 100, Bytes = 100;
 

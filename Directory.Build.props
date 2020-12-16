@@ -12,8 +12,8 @@
     <RepositoryType>git</RepositoryType>
     <Copyright>CSharpie LLC</Copyright>
     <Authors>CSharpie LLC</Authors>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
-    <Version>0.0.12</Version>
+    <Version>0.0.13</Version>
   </PropertyGroup>
 </Project>

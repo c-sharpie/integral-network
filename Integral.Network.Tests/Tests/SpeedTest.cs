@@ -15,7 +15,7 @@ namespace Integral.Tests
     [TestClass]
     public class SpeedTest
     {
-        private const bool webSockets = true;
+        private const bool webSockets = false;
 
         private const int Connections = 100, Iterations = 100;
 
